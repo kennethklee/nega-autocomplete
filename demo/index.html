@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>nega-autocomplete demo</title>
+
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+    <script type="module">
+      import '@polymer/iron-demo-helpers/demo-pages-shared-styles';
+      import '@polymer/iron-demo-helpers/demo-snippet';
+      import '@polymer/paper-input/paper-input.js'
+      import '../nega-autocomplete.js'
+    </script>
+
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+      </style>
+    </custom-style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic nega-autocomplete demo</h3>
+      <demo-snippet>
+        <template>
+          <nega-autocomplete items="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;,&quot;fish&quot;,&quot;rabbit&quot;,&quot;fox&quot;,&quot;bear&quot;]"></nega-autocomplete>
+        </template>
+      </demo-snippet>
+    </div>
+
+    <div class="vertical-section-container centered">
+        <h3>Basic nega-autocomplete demo with custom input</h3>
+        <demo-snippet>
+          <template>
+            <nega-autocomplete items="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;,&quot;fish&quot;,&quot;rabbit&quot;,&quot;fox&quot;,&quot;bear&quot;]">
+              <input type="text" placeholder="Animals" />
+            </nega-autocomplete>
+          </template>
+        </demo-snippet>
+      </div>
+
+    <div class="vertical-section-container centered">
+        <h3>Basic nega-autocomplete demo with paper-input</h3>
+        <demo-snippet>
+          <template>
+            <nega-autocomplete items="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;,&quot;fish&quot;,&quot;rabbit&quot;,&quot;fox&quot;,&quot;bear&quot;]">
+              <paper-input label="Animals"></paper-input>
+            </nega-autocomplete>
+          </template>
+        </demo-snippet>
+      </div>
+  </body>
+</html>

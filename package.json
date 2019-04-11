@@ -1,0 +1,34 @@
+{
+  "name": "nega-autocomplete",
+  "version": "0.0.0",
+  "description": "An autocomplete webcomponent",
+  "main": "nega-autocomplete.js",
+  "scripts": {
+    "start": "polymer serve -H 0",
+    "test": "polymer test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kennethklee/nega-autocomplete.git"
+  },
+  "keywords": [
+    "webcomponent",
+    "autocomplete"
+  ],
+  "author": "Kenneth Lee <kennethkl@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/kennethklee/nega-autocomplete/issues"
+  },
+  "homepage": "https://github.com/kennethklee/nega-autocomplete#readme",
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "lit-element": "^2.1.0"
+  },
+  "devDependencies": {
+    "@polymer/iron-demo-helpers": "^3.0.0-pre.19",
+    "@polymer/paper-input": "^3.0.2",
+    "@polymer/test-fixture": "^4.0.2",
+    "mocha": "^5.2.0",
+    "polymer-cli": "^1.9.8"
+  }
+}
