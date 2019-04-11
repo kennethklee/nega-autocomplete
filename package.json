@@ -16,6 +16,7 @@
     "autocomplete"
   ],
   "author": "Kenneth Lee <kennethkl@gmail.com>",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/kennethklee/nega-autocomplete/issues"
   },
