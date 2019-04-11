@@ -43,6 +43,11 @@
         test('instantiating the element with default properties works', () => {
           const element = fixture('BasicTestFixture')
           assert.equal(element.items.length, 0)
+
+          // const elementShadowRoot = element.shadowRoot
+          // const elementList = elementShadowRoot.querySelector('ul')
+          // assert.ok(elementList)
+
         });
 
         test('setting a property on the element works', () => {
