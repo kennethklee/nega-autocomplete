@@ -28,26 +28,40 @@
       </template>
     </test-fixture>
 
+  
+    <test-fixture id="SuggestionsPropertyTestFixture">
+        <template>
+          <nega-autocomplete suggestions="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;,&quot;fish&quot;,&quot;rabbit&quot;,&quot;fox&quot;,&quot;bear&quot;]">
+            <input id="suggestionsInput" />
+          </nega-autocomplete>
+        </template>
+      </test-fixture>
+
     <script type="module">
       suite('nega-autocomplete', () => {
 
         test('instantiating the element with default properties works', () => {
-          const element = fixture('BasicTestFixture');
-          assert.equal(element.items.length, 0);
-          const elementShadowRoot = element.shadowRoot;
-          // const elementHeader = elementShadowRoot.querySelector('h2');
-          // assert.equal(elementHeader.innerHTML, 'Hello nega-autocomplete!');
+          const element = fixture('BasicTestFixture')
+          assert.equal(element.items.length, 0)
         });
 
         test('setting a property on the element works', () => {
-          // Create a test fixture
-          const element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.items[0], 'dog');
-          const elementShadowRoot = element.shadowRoot;
-          // const elementHeader = elementShadowRoot.querySelector('h2');
-          // assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+          const element = fixture('ChangedPropertyTestFixture')
+          assert.equal(element.items[0], 'dog')
         });
 
+        test.skip('setting suggestions property opens the suggestion list when focused', () => {
+          const element = fixture('SuggestionsPropertyTestFixture')
+          const elementInput = element.querySelector('#suggestionsInput')
+          const elementSuggestionList = element.shadowRoot.querySelector('ul')
+
+          assert.ok(elementSuggestionList)
+
+          elementInput.focus()
+          assert.ok(elementSuggestionList.hasAttribute('hidden'))
+          element.suggestions = ['test']
+          assert.notOk(elementSuggestionList.hasAttribute('hidden'))
+        });
       });
     </script>
 

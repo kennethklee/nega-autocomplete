@@ -93,6 +93,7 @@ class NegaAutoComplete extends  LitElement {
   }
 
   disconnectedCallback() {
+    if (!this._inputEl) return;
     this._inputEl.removeEventListener('keydown', this._bound.onKeyDown);
     this._inputEl.removeEventListener('keyup', this._bound.onKeyUp);
     this._inputEl.removeEventListener('focus', this._bound.onFocus);
@@ -104,43 +105,62 @@ class NegaAutoComplete extends  LitElement {
       // Highlight the first when there's suggestions
       this._highlightedEl = this._suggestionEl.children[0]
       this._highlightedEl.classList.add('active')
+      document.activeElement === this._inputEl && this.open() // Open suggestions if we have focus
     }
   }
-  
-  highlightPrev() {
-    if (!this._highlightedEl || !this._highlightedEl.previousElementSibling) return;
 
-    this._highlightedEl.classList.remove('active')
-    this._highlightedEl = this._highlightedEl.previousElementSibling
-    this._highlightedEl.classList.add('active')
-    // console.log('prev', this._highlightedEl)
+  /**
+   * Handy value getter for input value
+   */
+  get value() {
+    return this._inputEl && this._inputEl.value
   }
 
-  highlightNext() {
-    if (!this._highlightedEl || !this._highlightedEl.nextElementSibling) return;
-
-    this._highlightedEl.classList.remove('active')
-    this._highlightedEl = this._highlightedEl.nextElementSibling
-    this._highlightedEl.classList.add('active')
-    // console.log('next', this._highlightedEl)
-  }
-
+  /**
+   * Open suggestions.
+   */
   open() {
-    this.opened = true
+    if (this.suggestions.length) {
+      this.opened = true
+    }
   }
 
+  /**
+   * Close suggestions.
+   */
   close() {
     this.opened = false
     this._highlightedEl = null
   }
 
+  /**
+   * Autocomplete input with `value`.
+   * @param {String} value 
+   */
   autocomplete(value) {
     this._inputEl.value = value
     this.close()
     this.dispatchEvent(new CustomEvent('autocomplete', {detail: {value: value}, composed: true, bubbles: true}))
   }
 
+  _highlightPrev() {
+    if (!this._highlightedEl || !this._highlightedEl.previousElementSibling) return;
+
+    this._highlightedEl.classList.remove('active')
+    this._highlightedEl = this._highlightedEl.previousElementSibling
+    this._highlightedEl.classList.add('active')
+  }
+
+  _highlightNext() {
+    if (!this._highlightedEl || !this._highlightedEl.nextElementSibling) return;
+
+    this._highlightedEl.classList.remove('active')
+    this._highlightedEl = this._highlightedEl.nextElementSibling
+    this._highlightedEl.classList.add('active')
+  }
+
   _onKeyDown(ev) {
+    // Prevent up and down from behaving as home and end
     if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown') {
       ev.preventDefault()
       ev.stopPropagation()
@@ -152,12 +172,12 @@ class NegaAutoComplete extends  LitElement {
       case 'ArrowUp':
         ev.preventDefault()
         ev.stopPropagation()
-        this.highlightPrev()
+        this._highlightPrev()
         break
       case 'ArrowDown':
         ev.preventDefault()
         ev.stopPropagation()
-        this.highlightNext()
+        this._highlightNext()
         break
       case 'Enter':
         // Select

@@ -4,8 +4,8 @@
   "description": "An autocomplete webcomponent",
   "main": "nega-autocomplete.js",
   "scripts": {
-    "start": "polymer serve -H 0",
-    "test": "polymer test"
+    "start": "polymer serve --npm -H 0",
+    "test": "polymer test --npm"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,9 @@
     "@polymer/iron-demo-helpers": "^3.0.0-pre.19",
     "@polymer/paper-input": "^3.0.2",
     "@polymer/test-fixture": "^4.0.2",
+    "chai": "^4.2.0",
     "mocha": "^5.2.0",
-    "polymer-cli": "^1.9.8"
+    "polymer-cli": "^1.9.8",
+    "wct-mocha": "^1.0.0"
   }
 }
