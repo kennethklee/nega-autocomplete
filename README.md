@@ -11,7 +11,7 @@ Example:
 <custom-element-demo>
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="nega-autocomplete.html">
+    <script type="module" src="nega-autocomplete.js">
     <style is="custom-style">
       #container {
         display: flex;
