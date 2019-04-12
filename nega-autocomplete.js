@@ -10,6 +10,13 @@ Basic autocomplete textbox: <nega-autocomplete items=" items="[&quot;dog&quot;,&
 Autocomplete custom textbox: <nega-autocomplete items=" items="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;]"><input placeholder="Animals" /></nega-autocomplete>
 ```
 
+The following custom properties and mixins are also available for styling:
+Custom property | Description | Default
+----------------|-------------|----------
+`--nega-autocomplete-container` | Mixin for suggestion box | `{}`
+`--nega-autocomplete-item` | Mixin for each item | `{}`
+`--nega-autocomplete-highlight` | Mixin for highlighted item | `{}`
+
 @element nega-autocomplete
 @demo demo/index.html
 */
@@ -44,6 +51,12 @@ class NegaAutoComplete extends  LitElement {
   render() {
     return html`
     <style>
+      :host {
+        --nega-autocomplete-container: {};
+        --nega-autocomplete-item: {};
+        --nega-autocomplete-highlight: {};
+      }
+
       ul {
         position: absolute;
         display: block;
@@ -54,11 +67,20 @@ class NegaAutoComplete extends  LitElement {
 
         border: 1px solid grey;
         background: white;
+
+        @apply --nega-autocomplete-container;
+      }
+
+      li {
+        padding: 4px;
+
+        @apply --nega-autocomplete-item;
       }
 
       li.active {
-        font-weight: bold;
         background: whitesmoke;
+
+        @apply --nega-autocomplete-highlight;
       }
 
       [hidden] {
@@ -105,7 +127,7 @@ class NegaAutoComplete extends  LitElement {
       // Highlight the first when there's suggestions
       this._highlightedEl = this._suggestionEl.children[0]
       this._highlightedEl.classList.add('active')
-      document.activeElement === this._inputEl && this.open() // Open suggestions if we have focus
+      this.open()
     }
   }
 

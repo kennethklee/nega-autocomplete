@@ -17,6 +17,22 @@
 
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
+        nega-autocomplete.styled {
+          --nega-autocomplete-container: {
+            color: blue;
+            font-weight: bold;
+            background: pink;
+          };
+
+          --nega-autocomplete-item: {
+            padding: 8px;
+          }
+
+          --nega-autocomplete-highlight: {
+            color: white;
+            background: black;
+          }
+        }
       </style>
     </custom-style>
   </head>
@@ -31,25 +47,34 @@
     </div>
 
     <div class="vertical-section-container centered">
-        <h3>Basic nega-autocomplete demo with custom input</h3>
-        <demo-snippet>
-          <template>
-            <nega-autocomplete items="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;,&quot;fish&quot;,&quot;rabbit&quot;,&quot;fox&quot;,&quot;bear&quot;]">
-              <input type="text" placeholder="Animals" />
-            </nega-autocomplete>
-          </template>
-        </demo-snippet>
-      </div>
+      <h3>Basic nega-autocomplete demo with custom input</h3>
+      <demo-snippet>
+        <template>
+          <nega-autocomplete items="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;,&quot;fish&quot;,&quot;rabbit&quot;,&quot;fox&quot;,&quot;bear&quot;]">
+            <input type="text" placeholder="Animals" />
+          </nega-autocomplete>
+        </template>
+      </demo-snippet>
+    </div>
 
     <div class="vertical-section-container centered">
         <h3>Basic nega-autocomplete demo with paper-input</h3>
-        <demo-snippet>
-          <template>
-            <nega-autocomplete items="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;,&quot;fish&quot;,&quot;rabbit&quot;,&quot;fox&quot;,&quot;bear&quot;]">
-              <paper-input label="Animals"></paper-input>
-            </nega-autocomplete>
-          </template>
-        </demo-snippet>
-      </div>
+      <demo-snippet>
+        <template>
+          <nega-autocomplete items="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;,&quot;fish&quot;,&quot;rabbit&quot;,&quot;fox&quot;,&quot;bear&quot;]">
+            <paper-input label="Animals"></paper-input>
+          </nega-autocomplete>
+        </template>
+      </demo-snippet>
+    </div>
+
+    <div class="vertical-section-container centered">
+      <h3>Styled nega-autocomplete demo</h3>
+      <demo-snippet>
+        <template>
+          <nega-autocomplete class="styled" items="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;,&quot;fish&quot;,&quot;rabbit&quot;,&quot;fox&quot;,&quot;bear&quot;]"></nega-autocomplete>
+        </template>
+      </demo-snippet>
+    </div>
   </body>
 </html>
