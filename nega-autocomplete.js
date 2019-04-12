@@ -132,10 +132,19 @@ class NegaAutoComplete extends  LitElement {
   }
 
   /**
-   * Handy value getter for input value
+   * Pass value from input element.
    */
   get value() {
     return this._inputEl && this._inputEl.value
+  }
+
+  /**
+   * Pass value to input element.
+   */
+  set value(value) {
+    if (this._inputEl) {
+      this._inputEl.value = value
+    }
   }
 
   /**
