@@ -31,43 +31,40 @@
   
     <test-fixture id="SuggestionsPropertyTestFixture">
         <template>
-          <nega-autocomplete suggestions="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;,&quot;fish&quot;,&quot;rabbit&quot;,&quot;fox&quot;,&quot;bear&quot;]">
+          <nega-autocomplete>
             <input id="suggestionsInput" />
           </nega-autocomplete>
         </template>
       </test-fixture>
 
     <script type="module">
-      suite('nega-autocomplete', () => {
-
-        test('instantiating the element with default properties works', () => {
+      describe('nega-autocomplete', () => {
+        it('instantiates the element with default properties', () => {
           const element = fixture('BasicTestFixture')
-          assert.equal(element.items.length, 0)
+          expect(element.items).to.be.an('array').and.be.empty
+          expect(element.opened).to.be.false
+          expect(element.maxSuggestions).to.equal(10)
+        })
 
-          // const elementShadowRoot = element.shadowRoot
-          // const elementList = elementShadowRoot.querySelector('ul')
-          // assert.ok(elementList)
-
-        });
-
-        test('setting a property on the element works', () => {
+        it('sets a property on the element', () => {
           const element = fixture('ChangedPropertyTestFixture')
-          assert.equal(element.items[0], 'dog')
-        });
+          expect(element.items).to.include('dog')
+        })
 
-        test.skip('setting suggestions property opens the suggestion list when focused', () => {
+        it('opens the suggestion list when the suggestions property is set', async () => {
           const element = fixture('SuggestionsPropertyTestFixture')
           const elementInput = element.querySelector('#suggestionsInput')
-          const elementSuggestionList = element.shadowRoot.querySelector('ul')
+          
+          await element.requestUpdate()
+          expect(element.opened).to.be.false
+          expect(element.shadowRoot.querySelector('ul').hasAttribute('hidden')).to.be.true
+          element.suggest(['test'])  // This should trigger an update
 
-          assert.ok(elementSuggestionList)
-
-          elementInput.focus()
-          assert.ok(elementSuggestionList.hasAttribute('hidden'))
-          element.suggestions = ['test']
-          assert.notOk(elementSuggestionList.hasAttribute('hidden'))
-        });
-      });
+          await element.updateComplete
+          expect(element.opened).to.be.true
+          expect(element.shadowRoot.querySelector('ul').hasAttribute('hidden')).to.be.false
+        })
+      })
     </script>
 
   </body>

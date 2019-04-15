@@ -30,7 +30,6 @@ Custom property | Description | Default
 class NegaAutoComplete extends  LitElement {
   static get properties() {
     return {
-      suggestions: {type: Array},
       items: {type: Array},
       opened: {type: Boolean, reflect: true},
       maxSuggestions: Number
@@ -38,14 +37,12 @@ class NegaAutoComplete extends  LitElement {
   }
   constructor() {
     super()
-    this.auto = true
     this.items = []
-    this.suggestions = []
     this.opened = false
     this.maxSuggestions = 10
-
-    // Keep reference of bound event handlers for disconnect
-    this._bound = {}
+    
+    this._suggestions = []
+    this._bound = {}  // Keep reference of bound event handlers for disconnect
   }
 
   render() {
@@ -90,60 +87,69 @@ class NegaAutoComplete extends  LitElement {
 
     <slot id="dropdown-input"><input id="defaultInput" type="text"/></slot>
     <ul id="suggestions" ?hidden=${!this.opened}>
-      ${this.suggestions.map(item => html`
+      ${this._suggestions.map(item => html`
       <li @click=${ev => this.autocomplete(item)}>${item}</li>
       `)}
     </ul>
     `
   }
 
-  firstUpdated() {
+  /**
+   * Input element getter
+   */
+  get contentElement() {
+    if (this._inputEl) return this._inputEl;  // Cache
+    if (!this.hasUpdated) return;  // No shadow root, no element to use
+
     var slotInputList = this.shadowRoot.getElementById('dropdown-input').assignedElements()
     this._inputEl = slotInputList.length ? slotInputList[0] : this.shadowRoot.getElementById('defaultInput')
+    return this._inputEl
+  }
+
+  /**
+   * Value getter from input element.
+   */
+  get value() {
+    return this.contentElement && this.contentElement.value
+  }
+
+  /**
+   * Value setter to input element.
+   */
+  set value(value) {
+    if (!this.contentElement) return;
+
+    this.contentElement.value = value
+  }
+
+  firstUpdated() {
     this._suggestionEl = this.shadowRoot.getElementById('suggestions')
-    this._suggestionEl.style.width = this._inputEl.getBoundingClientRect().width + 'px'
+    this._suggestionEl.style.width = this.contentElement.getBoundingClientRect().width + 'px'
 
     this._bound.onKeyDown = this._onKeyDown.bind(this)
     this._bound.onKeyUp = this._onKeyUp.bind(this)
     this._bound.onFocus = this._onFocus.bind(this)
     this._bound.onBlur = this._onBlur.bind(this)
 
-    this._inputEl.addEventListener('keydown', this._bound.onKeyDown);
-    this._inputEl.addEventListener('keyup', this._bound.onKeyUp);
-    this._inputEl.addEventListener('focus', this._bound.onFocus);
-    this._inputEl.addEventListener('blur', this._bound.onBlur);
+    this.contentElement.addEventListener('keydown', this._bound.onKeyDown)
+    this.contentElement.addEventListener('keyup', this._bound.onKeyUp)
+    this.contentElement.addEventListener('focus', this._bound.onFocus)
+    this.contentElement.addEventListener('blur', this._bound.onBlur)
   }
 
   disconnectedCallback() {
-    if (!this._inputEl) return;
-    this._inputEl.removeEventListener('keydown', this._bound.onKeyDown);
-    this._inputEl.removeEventListener('keyup', this._bound.onKeyUp);
-    this._inputEl.removeEventListener('focus', this._bound.onFocus);
-    this._inputEl.removeEventListener('blur', this._bound.onBlur);
+    if (!this.contentElement) return // no events to remove
+    this.contentElement.removeEventListener('keydown', this._bound.onKeyDown)
+    this.contentElement.removeEventListener('keyup', this._bound.onKeyUp)
+    this.contentElement.removeEventListener('focus', this._bound.onFocus)
+    this.contentElement.removeEventListener('blur', this._bound.onBlur)
   }
 
   updated(changed) {
-    if (changed.has('suggestions') && this._suggestionEl.children[0]) {
-      // Highlight the first when there's suggestions
+    if (changed.has('opened') && this.opened && this._suggestionEl.childElementCount) {
+      // Highlight the first when there are suggestions
       this._highlightedEl = this._suggestionEl.children[0]
       this._highlightedEl.classList.add('active')
-      this.open()
-    }
-  }
-
-  /**
-   * Pass value from input element.
-   */
-  get value() {
-    return this._inputEl && this._inputEl.value
-  }
-
-  /**
-   * Pass value to input element.
-   */
-  set value(value) {
-    if (this._inputEl) {
-      this._inputEl.value = value
     }
   }
 
@@ -151,7 +157,7 @@ class NegaAutoComplete extends  LitElement {
    * Open suggestions.
    */
   open() {
-    if (this.suggestions.length) {
+    if (this._suggestions.length) {
       this.opened = true
     }
   }
@@ -165,11 +171,20 @@ class NegaAutoComplete extends  LitElement {
   }
 
   /**
+   * Suggest autocomplete items.
+   * @param {Array<String>} suggestions 
+   */
+  suggest(suggestions) {
+    this._suggestions = suggestions || []
+    this._suggestions.length ? this.open() : this.close()
+  }
+
+  /**
    * Autocomplete input with `value`.
    * @param {String} value 
    */
   autocomplete(value) {
-    this._inputEl.value = value
+    this.contentElement.value = value
     this.close()
     this.dispatchEvent(new CustomEvent('autocomplete', {detail: {value: value}, composed: true, bubbles: true}))
   }
@@ -191,7 +206,7 @@ class NegaAutoComplete extends  LitElement {
   }
 
   _onKeyDown(ev) {
-    // Prevent up and down from behaving as home and end
+    // Prevent up and down from behaving as home and end on some browsers
     if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown') {
       ev.preventDefault()
       ev.stopPropagation()
@@ -215,32 +230,25 @@ class NegaAutoComplete extends  LitElement {
         this._highlightedEl && this._highlightedEl.click()
         break
       default:
-        // Suggest
         // TODO debounce
         if (this.items.length) {
-          var value = this._inputEl.value
-          if (value) {
-            this.suggestions = this.items
-              .filter(item => item.startsWith(value) && item !== value) // Collect the items that match
-              .slice(0, this.maxSuggestions) // Limit results
-            this.open()
-          } else {
-            this.suggestions = []
-            this.close()
-          }
+          var value = this.contentElement.value
+          var suggestions = this.items
+            .filter(item => item.toLowerCase().startsWith(value.toLowerCase()) && item !== value) // Collect the items that match
+            .slice(0, this.maxSuggestions) // Limit results
+          this.suggest(suggestions)
         }
     }
   }
 
   _onFocus(ev) {
-    if (this.suggestions.length) {
+    if (this._suggestions.length) {
       this.open()
     }
   }
 
   _onBlur(ev) {
-    // Give it some time to process clicks
-    setTimeout(_ => this.close(), 200)
+    setTimeout(_ => this.close(), 100)  // Give it some time to process clicks
   }
 }
 window.customElements.define('nega-autocomplete', NegaAutoComplete);
