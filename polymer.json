@@ -1,0 +1,12 @@
+{
+  "npm": true,
+  "fragments": [
+    "demo/index.html",
+    "test/index.html"
+  ],
+  "lint": {
+    "rules": [
+      "polymer-3"
+    ]
+  }
+}

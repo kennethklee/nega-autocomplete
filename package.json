@@ -5,7 +5,8 @@
   "main": "nega-autocomplete.js",
   "scripts": {
     "start": "polymer serve --npm -H 0",
-    "test": "polymer test --npm"
+    "test": "polymer test --npm",
+    "build:docs": "rm -r docs || true && polymer build --npm && mv build/default docs"
   },
   "repository": {
     "type": "git",
