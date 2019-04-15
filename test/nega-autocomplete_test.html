@@ -28,22 +28,17 @@
       </template>
     </test-fixture>
 
-  
-    <test-fixture id="SuggestionsPropertyTestFixture">
-        <template>
-          <nega-autocomplete>
-            <input id="suggestionsInput" />
-          </nega-autocomplete>
-        </template>
-      </test-fixture>
-
     <script type="module">
       describe('nega-autocomplete', () => {
-        it('instantiates the element with default properties', () => {
+        it('instantiates the element with default properties', async () => {
           const element = fixture('BasicTestFixture')
+
           expect(element.items).to.be.an('array').and.be.empty
           expect(element.opened).to.be.false
           expect(element.maxSuggestions).to.equal(10)
+
+          await element.updateComplete
+          expect(element.shadowRoot.querySelector('ul').hasAttribute('hidden')).to.be.true
         })
 
         it('sets a property on the element', () => {
@@ -51,18 +46,40 @@
           expect(element.items).to.include('dog')
         })
 
-        it('opens the suggestion list when the suggestions property is set', async () => {
-          const element = fixture('SuggestionsPropertyTestFixture')
-          const elementInput = element.querySelector('#suggestionsInput')
-          
-          await element.requestUpdate()
-          expect(element.opened).to.be.false
-          expect(element.shadowRoot.querySelector('ul').hasAttribute('hidden')).to.be.true
-          element.suggest(['test'])  // This should trigger an update
+        describe('open()', () => {
+          it('shows the suggestion list', async () => {
+            const element = fixture('BasicTestFixture')
+            
+            element._suggestions = ['test']  // element needs to have suggestions to open
+            element.open()
+            await element.updateComplete
+            expect(element.shadowRoot.querySelector('ul').hasAttribute('hidden')).to.be.false
+          })
+        })
 
-          await element.updateComplete
-          expect(element.opened).to.be.true
-          expect(element.shadowRoot.querySelector('ul').hasAttribute('hidden')).to.be.false
+        describe('close()', () => {
+          it('hides the suggestion list', async () => {
+            const element = fixture('BasicTestFixture')
+            
+            element.close()
+            await element.updateComplete
+            expect(element.shadowRoot.querySelector('ul').hasAttribute('hidden')).to.be.true
+          })
+        })
+
+        describe('suggest()', () => {
+          it('opens and closes the suggestion list', async () => {
+            const element = fixture('BasicTestFixture')
+            const elementInput = element.querySelector('#suggestionsInput')
+            
+            element.suggest(['test'])  // This should trigger an update
+            await element.updateComplete
+            expect(element.opened).to.be.true
+
+            element.suggest()
+            await element.updateComplete
+            expect(element.opened).to.be.false
+          })
         })
       })
     </script>

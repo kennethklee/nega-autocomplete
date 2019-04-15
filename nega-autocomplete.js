@@ -233,7 +233,7 @@ class NegaAutoComplete extends  LitElement {
         // TODO debounce
         if (this.items.length) {
           var value = this.contentElement.value
-          var suggestions = this.items
+          var suggestions = value && this.items
             .filter(item => item.toLowerCase().startsWith(value.toLowerCase()) && item !== value) // Collect the items that match
             .slice(0, this.maxSuggestions) // Limit results
           this.suggest(suggestions)
