@@ -5,7 +5,7 @@
 A simple autocomplete web component.
 
 See: [Documentation](https://www.webcomponents.org/element/nega-autocomplete),
-  [Demo](https://www.webcomponents.org/element/nega-autocomplete/demo/demo/index.html).
+  [Demo](https://kennethklee.github.io/nega-autocomplete/demo/).
 
 # Usage
 
