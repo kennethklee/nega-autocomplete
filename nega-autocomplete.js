@@ -126,10 +126,10 @@ class NegaAutoComplete extends  LitElement {
     this._suggestionEl = this.shadowRoot.getElementById('suggestions')
     this._suggestionEl.style.width = this.contentElement.getBoundingClientRect().width + 'px'
 
-    this._bound.onKeyDown = this._onKeyDown.bind(this)
-    this._bound.onKeyUp = this._onKeyUp.bind(this)
-    this._bound.onFocus = this._onFocus.bind(this)
-    this._bound.onBlur = this._onBlur.bind(this)
+    this._bound.onKeyDown = this._handleKeyDown.bind(this)
+    this._bound.onKeyUp = this._handleKeyUp.bind(this)
+    this._bound.onFocus = this._handleFocus.bind(this)
+    this._bound.onBlur = this._handleBlur.bind(this)
 
     this.contentElement.addEventListener('keydown', this._bound.onKeyDown)
     this.contentElement.addEventListener('keyup', this._bound.onKeyUp)
@@ -205,7 +205,7 @@ class NegaAutoComplete extends  LitElement {
     this._highlightedEl.classList.add('active')
   }
 
-  _onKeyDown(ev) {
+  _handleKeyDown(ev) {
     // Prevent up and down from behaving as home and end on some browsers
     if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown') {
       ev.preventDefault()
@@ -213,7 +213,7 @@ class NegaAutoComplete extends  LitElement {
     }
   }
   
-  _onKeyUp(ev) {
+  _handleKeyUp(ev) {
     switch(ev.key) {
       case 'ArrowUp':
         ev.preventDefault()
@@ -241,13 +241,13 @@ class NegaAutoComplete extends  LitElement {
     }
   }
 
-  _onFocus(ev) {
+  _handleFocus(ev) {
     if (this._suggestions.length) {
       this.open()
     }
   }
 
-  _onBlur(ev) {
+  _handleBlur(ev) {
     setTimeout(_ => this.close(), 100)  // Give it some time to process clicks
   }
 }

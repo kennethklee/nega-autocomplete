@@ -2,33 +2,10 @@
 
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/kennethklee/nega-autocomplete)
 
-An autocomplete web component.
+A simple autocomplete web component.
 
-Example:
-
-<!---
-```
-<custom-element-demo>
-  <template>
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <script type="module" src="nega-autocomplete.js">
-    <style is="custom-style">
-      #container {
-        display: flex;
-      }
-    </style>
-    <div id="container">
-      <next-code-block></next-code-block>
-    </div>
-  </template>
-</custom-element-demo>
-```
--->
-```html
-<nega-autocomplete items="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;,&quot;fish&quot;,&quot;rabbit&quot;,&quot;fox&quot;,&quot;bear&quot;]">
-  <input type="text" placeholder="Animals" />
-</nega-autocomplete>
-```
+See: [Documentation](https://www.webcomponents.org/element/nega-autocomplete),
+  [Demo](https://www.webcomponents.org/element/nega-autocomplete/demo/demo/index.html).
 
 # Usage
 
