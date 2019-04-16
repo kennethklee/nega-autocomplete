@@ -190,6 +190,7 @@ class NegaAutoComplete extends LitElement {
   suggest(suggestions) {
     this._suggestions = suggestions || [];
     this._suggestions.length ? this.open() : this.close();
+    this.requestUpdate();
   }
   /**
    * Autocomplete input with `value`.
