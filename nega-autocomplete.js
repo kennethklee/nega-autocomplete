@@ -5,9 +5,9 @@ A simple component that provides basic autocomplete.
 Example:
 
 ```
-Basic autocomplete textbox: <nega-autocomplete items=" items="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;]"></nega-autocomplete>
+Basic autocomplete textbox: <nega-autocomplete items="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;]"></nega-autocomplete>
 
-Autocomplete custom textbox: <nega-autocomplete items=" items="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;]"><input placeholder="Animals" /></nega-autocomplete>
+Autocomplete custom textbox: <nega-autocomplete items="[&quot;dog&quot;,&quot;cat&quot;,&quot;bird&quot;]"><input placeholder="Animals" /></nega-autocomplete>
 ```
 
 The following custom properties and mixins are also available for styling:
@@ -27,7 +27,7 @@ Custom property | Description | Default
  * @customElement
  * @demo demo/index.html
  */
-class NegaAutoComplete extends  LitElement {
+class NegaAutoComplete extends LitElement {
   static get properties() {
     return {
       items: {type: Array},
@@ -185,6 +185,7 @@ class NegaAutoComplete extends  LitElement {
    * @param {String} value 
    */
   autocomplete(value) {
+    console.log('autocomplete')
     this.contentElement.value = value
     this.close()
     this.dispatchEvent(new CustomEvent('autocomplete', {detail: {value: value}, composed: true, bubbles: true}))
@@ -249,7 +250,9 @@ class NegaAutoComplete extends  LitElement {
   }
 
   _handleBlur(ev) {
-    setTimeout(_ => this.close(), 100)  // Give it some time to process clicks
+    // ev.stopPropagation();
+    // this.close();
+    setTimeout(_ => this.close(), 150)  // Give it some time to process clicks
   }
 }
 window.customElements.define('nega-autocomplete', NegaAutoComplete);
