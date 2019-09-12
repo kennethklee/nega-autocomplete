@@ -86,7 +86,7 @@ class NegaAutoComplete extends LitElement {
     </style>
 
     <slot id="dropdown-input"><input id="defaultInput" type="text"/></slot>
-    <ul id="suggestions" ?hidden=${!this.opened}>
+    <ul id="suggestions" ?hidden=${!this.opened} @mouseenter=${this._handleItemMouseEnter} @mouseleave=${this._handleItemMouseLeave}>
       ${this._suggestions.map(item => html`
       <li @click=${ev => this.autocomplete(item)}>${item}</li>
       `)}
@@ -185,7 +185,6 @@ class NegaAutoComplete extends LitElement {
    * @param {String} value 
    */
   autocomplete(value) {
-    console.log('autocomplete')
     this.contentElement.value = value
     this.close()
     this.dispatchEvent(new CustomEvent('autocomplete', {detail: {value: value}, composed: true, bubbles: true}))
@@ -244,15 +243,23 @@ class NegaAutoComplete extends LitElement {
   }
 
   _handleFocus(ev) {
-    if (this._suggestions.length) {
-      this.open()
-    }
+    this._blur = false
+    this._suggestions.length && this.open()
   }
 
   _handleBlur(ev) {
-    // ev.stopPropagation();
-    // this.close();
-    setTimeout(_ => this.close(), 150)  // Give it some time to process clicks
+    this._blur = true
+    !this._mouseEnter && this.close()
+  }
+
+  // Handle mouse change focus to suggestions
+  _handleItemMouseEnter(ev) {
+    this._mouseEnter = true
+  }
+
+  _handleItemMouseLeave(ev) {
+    this._mouseEnter = false
+    this._blur && setTimeout(_ => this.close(), 500)  // Give user some slack before closing
   }
 }
 window.customElements.define('nega-autocomplete', NegaAutoComplete);
