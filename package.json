@@ -1,6 +1,6 @@
 {
   "name": "nega-autocomplete",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "An autocomplete webcomponent",
   "main": "nega-autocomplete.js",
   "scripts": {
